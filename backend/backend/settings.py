@@ -30,7 +30,9 @@ INSTALLED_APPS = [
     'users',
 
     'rest_framework',
+    'rest_framework.authtoken',
     'djoser',
+
 ]
 
 MIDDLEWARE = [
@@ -123,11 +125,12 @@ STATICFILES_DIRS = ((BASE_DIR / 'static/'),)
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny'
-    ]
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
 }
 
 AUTH_USER_MODEL = 'users.User'
@@ -136,8 +139,6 @@ DJOSER = {
     "LOGIN_FIELD": "email",
     "USER_CREATE_PASSWORD_RETYPE": False,
     "SET_USERNAME_RETYPE": True,
-    "SET_PASSWORD_RETYPE": True,
-    "SOCIAL_AUTH_TOKEN_STRATEGY": "djoser.social.token.jwt.TokenStrategy",
     "SERIALIZERS": {
         "user_create": "users.serializers.UserCreateSerializer",  # custom serializer
         "user": "djoser.serializers.UserSerializer",
