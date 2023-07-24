@@ -1,16 +1,17 @@
 from django.shortcuts import render
-from requests import Response
+
 from rest_framework import viewsets, status
+from rest_framework.response import Response
 
 from .models import User
 from .permissions import AdminAndSuperUser
-from .serializers import UserSerializer
+from .serializers import UserCreateSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = (AdminAndSuperUser,)
+    serializer_class = UserCreateSerializer
+    # permission_classes = (AdminAndSuperUser,)
     # pagination_class = CustomPagination
     # filter_backends = (filters.SearchFilter,)
     search_fields = ('username',)
@@ -18,7 +19,8 @@ class UserViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post']
 
     def create(self, request, **kwargs):
-        serializer = UserSerializer(data=request.data)
+        print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+        serializer = UserCreateSerializer(data=request.data)
         if serializer.is_valid():
             email = serializer.data.get('email')
             if User.objects.filter(email=email).exists():

@@ -1,16 +1,20 @@
-from django.contrib.auth.validators import UnicodeUsernameValidator
+from djoser.serializers import UserCreateSerializer
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from .models import User
+User = get_user_model()
 
 
-class UserSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(
-        max_length=254
+class UserCreateSerializer(UserCreateSerializer):
+    first_name = serializers.SlugField(
+        max_length=150,
+        required=True
+    )
+    last_name = serializers.SlugField(
+        max_length=150,
+        required=True
     )
 
-    class Meta:
-        fields = (
-            'username', 'email', 'first_name', 'last_name', 'bio', 'role'
-        )
+    class Meta(UserCreateSerializer.Meta):
         model = User
+        fields = ("email", "id", "username", "first_name", "last_name", "password")
