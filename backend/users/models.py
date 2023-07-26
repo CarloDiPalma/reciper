@@ -25,8 +25,6 @@ class User(AbstractUser):
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
 
-    # objects = CustomUserManager()
-
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username", "first_name", "last_name"]
 
