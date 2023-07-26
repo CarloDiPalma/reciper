@@ -21,9 +21,6 @@ class Ingredient(models.Model):
     name = models.CharField(
         max_length=70
     )
-    amount = models.PositiveSmallIntegerField(
-        verbose_name='Количество'
-    )
     measurement_unit = models.CharField(
         max_length=10,
         verbose_name='Единицы измерения'
@@ -55,4 +52,27 @@ class Recipe(models.Model):
             MinValueValidator(1, message='Минимум один час')
         ]
     )
+    ingredients = models.ManyToManyField(
+        Ingredient,
+        through='RecipeIngredient',
+        verbose_name='Ингредиенты'
+    )
+
+    class RecipeIngredient(models.Model):
+        recipe = models.ForeignKey(
+            Recipe,
+            on_delete=models.CASCADE,
+            verbose_name='Рецепт',
+        )
+        ingredient = models.ForeignKey(
+            Ingredient,
+            on_delete=models.CASCADE,
+            verbose_name='Ингредиент',
+        )
+        amount = models.PositiveSmallIntegerField(
+            verbose_name='Количество',
+            validators=[
+                MinValueValidator(1, message='Минимум 1')
+            ]
+        )
 
