@@ -17,6 +17,19 @@ class Tag(models.Model):
     )
 
 
+class Ingredient(models.Model):
+    name = models.CharField(
+        max_length=70
+    )
+    amount = models.PositiveSmallIntegerField(
+        verbose_name='Количество'
+    )
+    measurement_unit = models.CharField(
+        max_length=10,
+        verbose_name='Единицы измерения'
+    )
+
+
 class Recipe(models.Models):
     author = models.ForeignKey(
         User,
