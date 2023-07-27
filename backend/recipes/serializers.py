@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from .models import Recipe, Tag
+from users.serializers import UserCreateSerializer
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -14,6 +15,9 @@ class RecipeSerializer(serializers.ModelSerializer):
         many=True,
         required=True,
         # source='tag_set'
+    )
+    author = UserCreateSerializer(
+        many=False
     )
     # last_name = serializers.SlugField(
     #     max_length=150,
