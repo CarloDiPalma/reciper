@@ -2,6 +2,7 @@ import base64
 
 from django.core.files.base import ContentFile
 from rest_framework import serializers
+from rest_framework.relations import PrimaryKeyRelatedField
 from users.serializers import UserCreateSerializer
 
 from .models import Ingredient, Recipe, Tag
@@ -51,9 +52,9 @@ class RecipeReadSerializer(serializers.ModelSerializer):
 
 
 class RecipeWriteSerializer(serializers.ModelSerializer):
-    tags = TagSerializer(
-        # many=True,
-        required=True,
+    tags = PrimaryKeyRelatedField(
+        queryset=Tag.objects.all(),
+        many=True
     )
     author = UserCreateSerializer(
         many=False
