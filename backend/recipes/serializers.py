@@ -16,11 +16,10 @@ class IngredientSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'measurement_unit')
 
 
-class RecipeSerializer(serializers.ModelSerializer):
+class RecipeReadSerializer(serializers.ModelSerializer):
     tags = TagSerializer(
-        many=True,
+        # many=True,
         required=True,
-        # source='tag_set'
     )
     author = UserCreateSerializer(
         many=False
@@ -29,6 +28,21 @@ class RecipeSerializer(serializers.ModelSerializer):
     #     max_length=150,
     #     required=True
     # )
+
+    class Meta:
+        model = Recipe
+        fields = ('id', 'tags', 'author', 'ingredients',
+                  'name', 'image', 'text', 'cooking_time')
+
+
+class RecipeWriteSerializer(serializers.ModelSerializer):
+    tags = TagSerializer(
+        # many=True,
+        required=True,
+    )
+    author = UserCreateSerializer(
+        many=False
+    )
 
     class Meta:
         model = Recipe
