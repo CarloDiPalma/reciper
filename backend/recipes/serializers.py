@@ -2,10 +2,11 @@ import base64
 
 from django.core.files.base import ContentFile
 from rest_framework import serializers
+from rest_framework.fields import IntegerField
 from rest_framework.relations import PrimaryKeyRelatedField
 from users.serializers import UserCreateSerializer
 
-from .models import Ingredient, Recipe, Tag
+from .models import Ingredient, Recipe, Tag, RecipeIngredient
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -51,14 +52,20 @@ class RecipeReadSerializer(serializers.ModelSerializer):
                   'name', 'image', 'text', 'cooking_time')
 
 
+class RecipeIngredientWriteSerializer(serializers.ModelSerializer):
+    id = IntegerField(write_only=True)
+
+    class Meta:
+        model = RecipeIngredient
+        fields = ('id', 'amount')
+
+
 class RecipeWriteSerializer(serializers.ModelSerializer):
     tags = PrimaryKeyRelatedField(
         queryset=Tag.objects.all(),
         many=True
     )
-    author = UserCreateSerializer(
-        many=False
-    )
+    ingredients = RecipeIngredientWriteSerializer(many=True)
     image = Base64ImageField()
 
     class Meta:
@@ -67,5 +74,10 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
                   'name', 'image', 'text', 'cooking_time')
 
     def create(self, validated_data):
-        print('AAAAAAAAAAAAAAAAAAAAAAAAAAAA')
         print(validated_data)
+        tags = validated_data.pop('tags')
+        ingredients = validated_data.pop('ingredients')
+        recipe = Recipe.objects.create(**validated_data)
+        recipe.tags.set(tags)
+
+        return recipe
