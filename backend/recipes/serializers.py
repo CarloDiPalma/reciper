@@ -3,6 +3,7 @@ import base64
 from django.core.files.base import ContentFile
 from rest_framework import serializers
 from rest_framework.fields import IntegerField
+from rest_framework.generics import get_object_or_404
 from rest_framework.relations import PrimaryKeyRelatedField
 from users.serializers import UserCreateSerializer
 
@@ -54,6 +55,7 @@ class RecipeReadSerializer(serializers.ModelSerializer):
 
 class RecipeIngredientWriteSerializer(serializers.ModelSerializer):
     id = IntegerField(write_only=True)
+    amount = IntegerField(write_only=True)
 
     class Meta:
         model = RecipeIngredient
@@ -65,6 +67,7 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         queryset=Tag.objects.all(),
         many=True
     )
+    author = UserCreateSerializer(read_only=True)
     ingredients = RecipeIngredientWriteSerializer(many=True)
     image = Base64ImageField()
 
@@ -79,5 +82,27 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         ingredients = validated_data.pop('ingredients')
         recipe = Recipe.objects.create(**validated_data)
         recipe.tags.set(tags)
-
+        RecipeIngredient.objects.bulk_create(
+            [RecipeIngredient(
+                ingredient=Ingredient.objects.get(id=ingredient['id']),
+                recipe=recipe,
+                amount=ingredient.get('amount')
+            ) for ingredient in ingredients]
+        )
+        # for ingredient in ingredients:
+        #     current_ingredient, status = RecipeIngredient.objects.bulk_create(
+        #         recipe=recipe,
+        #         ingredient=get_object_or_404(Ingredient, id=ingredient.get('id')),
+        #         amount=ingredient.get('amount')
+        #     )
+        # objs = []
+        #
+        # for ingredient, amount in ingredients.values():
+        #     objs.append(
+        #         RecipeIngredient(
+        #             recipe=recipe, ingredients=ingredient, amount=amount
+        #         )
+        #     )
+        #
+        # RecipeIngredient.objects.bulk_create(objs)
         return recipe
