@@ -1,6 +1,7 @@
 import base64
 
 from django.core.files.base import ContentFile
+from django.db.models import F
 from rest_framework import serializers
 from rest_framework.fields import IntegerField, SerializerMethodField
 from rest_framework.generics import get_object_or_404
@@ -39,7 +40,7 @@ class RecipeReadSerializer(serializers.ModelSerializer):
         read_only=True
     )
     author = UserCreateSerializer(read_only=True)
-    ingredients = SerializerMethodField
+    ingredients = SerializerMethodField()
     image = Base64ImageField()
     # last_name = serializers.SlugField(
     #     max_length=150,
@@ -51,15 +52,14 @@ class RecipeReadSerializer(serializers.ModelSerializer):
         fields = ('id', 'tags', 'author', 'ingredients',
                   'name', 'image', 'text', 'cooking_time')
 
-    # def get_ingredients(self, obj):
-    #     recipe = obj
-    #     ingredients = recipe.ingredients.values(
-    #         'id',
-    #         'name',
-    #         'measurement_unit',
-    #         amount=F('ingredientinrecipe__amount')
-    #     )
-    #     return ingredients
+    def get_ingredients(self, recipe):
+        ingredients = recipe.ingredients.values(
+            'id',
+            'name',
+            'measurement_unit',
+            amount=F('recipeingredient__amount')
+        )
+        return ingredients
 
 
 class RecipeIngredientWriteSerializer(serializers.ModelSerializer):
