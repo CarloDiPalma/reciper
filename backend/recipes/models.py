@@ -128,3 +128,10 @@ class Favorite(models.Model):
         on_delete=models.CASCADE,
         verbose_name='Пользователь, добавивший в избранное',
     )
+
+    class Meta:
+        verbose_name = 'Рецепт в избранном'
+        verbose_name_plural = 'Рецепты в избранном'
+
+    # def __str__(self):
+    #     return self.user
