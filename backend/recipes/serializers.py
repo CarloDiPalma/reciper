@@ -2,7 +2,7 @@ import base64
 
 from django.core.files.base import ContentFile
 from rest_framework import serializers
-from rest_framework.fields import IntegerField
+from rest_framework.fields import IntegerField, SerializerMethodField
 from rest_framework.generics import get_object_or_404
 from rest_framework.relations import PrimaryKeyRelatedField
 from users.serializers import UserCreateSerializer
@@ -35,12 +35,11 @@ class Base64ImageField(serializers.ImageField):
 
 class RecipeReadSerializer(serializers.ModelSerializer):
     tags = TagSerializer(
-        # many=True,
-        required=True,
+        many=True,
+        read_only=True
     )
-    author = UserCreateSerializer(
-        many=False
-    )
+    author = UserCreateSerializer(read_only=True)
+    ingredients = SerializerMethodField
     image = Base64ImageField()
     # last_name = serializers.SlugField(
     #     max_length=150,
@@ -51,6 +50,16 @@ class RecipeReadSerializer(serializers.ModelSerializer):
         model = Recipe
         fields = ('id', 'tags', 'author', 'ingredients',
                   'name', 'image', 'text', 'cooking_time')
+
+    # def get_ingredients(self, obj):
+    #     recipe = obj
+    #     ingredients = recipe.ingredients.values(
+    #         'id',
+    #         'name',
+    #         'measurement_unit',
+    #         amount=F('ingredientinrecipe__amount')
+    #     )
+    #     return ingredients
 
 
 class RecipeIngredientWriteSerializer(serializers.ModelSerializer):
@@ -89,20 +98,8 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
                 amount=ingredient.get('amount')
             ) for ingredient in ingredients]
         )
-        # for ingredient in ingredients:
-        #     current_ingredient, status = RecipeIngredient.objects.bulk_create(
-        #         recipe=recipe,
-        #         ingredient=get_object_or_404(Ingredient, id=ingredient.get('id')),
-        #         amount=ingredient.get('amount')
-        #     )
-        # objs = []
-        #
-        # for ingredient, amount in ingredients.values():
-        #     objs.append(
-        #         RecipeIngredient(
-        #             recipe=recipe, ingredients=ingredient, amount=amount
-        #         )
-        #     )
-        #
-        # RecipeIngredient.objects.bulk_create(objs)
         return recipe
+
+    def to_representation(self, instance):
+        serializer = RecipeReadSerializer(instance)
+        return serializer.data
