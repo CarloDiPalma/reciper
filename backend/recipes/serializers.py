@@ -3,7 +3,8 @@ import base64
 from django.core.files.base import ContentFile
 from django.db.models import F
 from rest_framework import serializers
-from rest_framework.fields import IntegerField, SerializerMethodField
+from rest_framework.fields import (IntegerField, SerializerMethodField,
+                                   CurrentUserDefault)
 from rest_framework.generics import get_object_or_404
 from rest_framework.relations import PrimaryKeyRelatedField
 from users.serializers import UserCreateSerializer
@@ -40,16 +41,16 @@ class RecipeReadSerializer(serializers.ModelSerializer):
         read_only=True
     )
     author = UserCreateSerializer(read_only=True)
-    ingredients = SerializerMethodField()
+    ingredients = SerializerMethodField(method_name='get_ingredients')
     image = Base64ImageField()
-    # last_name = serializers.SlugField(
-    #     max_length=150,
-    #     required=True
-    # )
+    is_favorited = SerializerMethodField(
+        method_name='get_is_favorited',
+        read_only=True
+    )
 
     class Meta:
         model = Recipe
-        fields = ('id', 'tags', 'author', 'ingredients',
+        fields = ('id', 'tags', 'author', 'ingredients', 'is_favorited',
                   'name', 'image', 'text', 'cooking_time')
 
     def get_ingredients(self, recipe):
@@ -60,6 +61,15 @@ class RecipeReadSerializer(serializers.ModelSerializer):
             amount=F('recipeingredient__amount')
         )
         return ingredients
+
+    def get_is_favorited(self, recipe):
+        if self.context.get('request').method == 'POST':
+            return False
+        user = self.context.get('request').user
+
+        if user.is_anonymous:
+            return False
+        return user.favorites.filter(recipe=recipe).exists()
 
 
 class RecipeIngredientWriteSerializer(serializers.ModelSerializer):
@@ -86,7 +96,6 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
                   'name', 'image', 'text', 'cooking_time')
 
     def create(self, validated_data):
-        print(validated_data)
         tags = validated_data.pop('tags')
         ingredients = validated_data.pop('ingredients')
         recipe = Recipe.objects.create(**validated_data)
@@ -101,5 +110,6 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         return recipe
 
     def to_representation(self, instance):
-        serializer = RecipeReadSerializer(instance)
-        return serializer.data
+        request = self.context.get('request')
+        context = {'request': request}
+        return RecipeReadSerializer(instance, context=context).data
