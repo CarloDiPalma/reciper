@@ -1,8 +1,11 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+from django.db.models import UniqueConstraint
 
 
 class User(AbstractUser):
+    """Кастомный юзер"""
+
     email = models.EmailField(
         unique=True,
         max_length=254
@@ -30,3 +33,33 @@ class User(AbstractUser):
 
     class Meta:
         ordering = ['-id']
+
+
+class Subscription(models.Model):
+    """Подписка на пользователя"""
+
+    author = models.ForeignKey(
+        User,
+        null=False,
+        on_delete=models.CASCADE,
+        verbose_name="Автор рецепта"
+    )
+    follower = models.ForeignKey(
+        User,
+        null=False,
+        on_delete=models.CASCADE,
+        verbose_name="Подписчик автора",
+    )
+
+    class Meta:
+        verbose_name = "Подписка"
+        verbose_name_plural = "Подписки"
+        constraints = (
+            UniqueConstraint(
+                fields=("author", "user"),
+                name="Нельзя подписаться дважды",
+            ),
+        )
+
+    def __str__(self):
+        return f"Подписка {self.follower.username} на {self.author.username}"
