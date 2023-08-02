@@ -25,4 +25,11 @@ class UserCreateSerializer(UserCreateSerializer):
                   "last_name", "is_subscribed", "password")
 
     def get_is_subscribed(self, obj):
-        pass
+        if self.context.get('request').method == 'POST':
+            return False
+        user = self.context.get('request').user
+        print('OBJ', obj)
+        print('USER', user)
+        if user.is_anonymous:
+            return False
+        return user.followers.filter(follower=user).exists()
