@@ -73,6 +73,15 @@ class RecipeReadSerializer(serializers.ModelSerializer):
             return False
         return user.favorites.filter(recipe=recipe).exists()
 
+    def get_is_in_shopping_cart(self, recipe):
+        if self.context.get('request').method == 'POST':
+            return False
+        user = self.context.get('request').user
+
+        if user.is_anonymous:
+            return False
+        return user.shoppingcart.filter(recipe=recipe).exists()
+
 
 class RecipeIngredientWriteSerializer(serializers.ModelSerializer):
     id = IntegerField(write_only=True)
