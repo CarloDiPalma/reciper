@@ -24,5 +24,5 @@ class UserCreateSerializer(UserCreateSerializer):
         fields = ("email", "id", "username", "first_name",
                   "last_name", "is_subscribed", "password")
 
-    def get_is_subscribed(self):
+    def get_is_subscribed(self, obj):
         pass
