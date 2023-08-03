@@ -124,17 +124,19 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         tags = validated_data.pop('tags')
         ingredients = validated_data.pop('ingredients')
         instance = super().update(recipe, validated_data)
-        instance.tags.clear()
-        instance.tags.set(tags)
-        instance.ingredients.clear()
+        if tags:
+            instance.tags.clear()
+            instance.tags.set(tags)
+        if ingredients:
+            instance.ingredients.clear()
 
-        RecipeIngredient.objects.bulk_create(
-            [RecipeIngredient(
-                ingredient=Ingredient.objects.get(id=ingredient['id']),
-                recipe=recipe,
-                amount=ingredient.get('amount')
-            ) for ingredient in ingredients]
-        )
+            RecipeIngredient.objects.bulk_create(
+                [RecipeIngredient(
+                    ingredient=Ingredient.objects.get(id=ingredient['id']),
+                    recipe=recipe,
+                    amount=ingredient.get('amount')
+                ) for ingredient in ingredients]
+            )
 
         instance.save()
         return instance

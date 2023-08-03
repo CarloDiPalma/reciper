@@ -13,7 +13,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     # filter_backends = (filters.SearchFilter,)
     search_fields = ('username',)
     lookup_field = 'id'
-    http_method_names = ['get', 'post', 'patch', 'del']
+    http_method_names = ['get', 'post', 'patch', 'delete']
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
