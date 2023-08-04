@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import SAFE_METHODS
 
 from .models import Ingredient, Recipe, Tag
+from .pagination import CustomPagination
 from .serializers import (IngredientSerializer, RecipeReadSerializer,
                           RecipeWriteSerializer, TagSerializer)
 
@@ -9,7 +10,7 @@ from .serializers import (IngredientSerializer, RecipeReadSerializer,
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     # permission_classes = (AdminAndSuperUser,)
-    # pagination_class = CustomPagination
+    pagination_class = CustomPagination
     # filter_backends = (filters.SearchFilter,)
     search_fields = ('username',)
     lookup_field = 'id'
