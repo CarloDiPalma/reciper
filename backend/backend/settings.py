@@ -32,8 +32,8 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework.authtoken',
+    'django_filters',
     'djoser',
-
 ]
 
 MIDDLEWARE = [
@@ -147,7 +147,7 @@ DJOSER = {
     "USER_CREATE_PASSWORD_RETYPE": False,
     "SET_USERNAME_RETYPE": True,
     "SERIALIZERS": {
-        "user_create": "users.serializers.UserCreateSerializer",  # custom serializer
+        "user_create": "users.serializers.UserCreateSerializer",
         "user": "djoser.serializers.UserSerializer",
         "current_user": "djoser.serializers.UserSerializer",
         "user_delete": "djoser.serializers.UserSerializer",

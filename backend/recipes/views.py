@@ -1,3 +1,4 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.permissions import SAFE_METHODS
 
@@ -11,8 +12,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     # permission_classes = (AdminAndSuperUser,)
     pagination_class = CustomPagination
-    # filter_backends = (filters.SearchFilter,)
-    search_fields = ('username',)
+    filter_backends = (DjangoFilterBackend,)
     lookup_field = 'id'
     http_method_names = ['get', 'post', 'patch', 'delete']
 
