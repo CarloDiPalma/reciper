@@ -2,6 +2,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.permissions import SAFE_METHODS
 
+from .filters import RecipeFilter
 from .models import Ingredient, Recipe, Tag
 from .pagination import CustomPagination
 from .serializers import (IngredientSerializer, RecipeReadSerializer,
@@ -13,6 +14,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     # permission_classes = (AdminAndSuperUser,)
     pagination_class = CustomPagination
     filter_backends = (DjangoFilterBackend,)
+    filterset_class = RecipeFilter
     lookup_field = 'id'
     http_method_names = ['get', 'post', 'patch', 'delete']
 
