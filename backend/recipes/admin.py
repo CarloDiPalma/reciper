@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.contrib.admin import TabularInline
 
-from .models import Ingredient, Recipe, RecipeIngredient, Tag, Favorite
+from .models import Ingredient, Recipe, RecipeIngredient, Tag, Favorite, \
+    ShoppingCart
 
 
 class IngredientInline(TabularInline):
@@ -43,6 +44,13 @@ class RecipeIngredientAdmin(admin.ModelAdmin):
 
 @admin.register(Favorite)
 class FavoriteAdmin(admin.ModelAdmin):
+    list_display = ('recipe', 'user')
+    search_fields = ('recipe',)
+    empty_value_display = '-пусто-'
+
+
+@admin.register(ShoppingCart)
+class ShoppingCartAdmin(admin.ModelAdmin):
     list_display = ('recipe', 'user')
     search_fields = ('recipe',)
     empty_value_display = '-пусто-'
