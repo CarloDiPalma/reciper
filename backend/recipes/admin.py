@@ -1,6 +1,12 @@
 from django.contrib import admin
+from django.contrib.admin import TabularInline
 
 from .models import Ingredient, Recipe, RecipeIngredient, Tag, Favorite
+
+
+class IngredientInline(TabularInline):
+    model = RecipeIngredient
+    extra = 1
 
 
 @admin.register(Tag)
@@ -16,6 +22,7 @@ class RecipeAdmin(admin.ModelAdmin):
     list_editable = ('text',)
     search_fields = ('name',)
     empty_value_display = '-пусто-'
+    inlines = (IngredientInline,)
 
 
 @admin.register(Ingredient)
