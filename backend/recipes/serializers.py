@@ -3,9 +3,7 @@ import base64
 from django.core.files.base import ContentFile
 from django.db.models import F
 from rest_framework import serializers
-from rest_framework.fields import (IntegerField, SerializerMethodField,
-                                   CurrentUserDefault)
-from rest_framework.generics import get_object_or_404
+from rest_framework.fields import IntegerField, SerializerMethodField
 from rest_framework.relations import PrimaryKeyRelatedField
 from users.serializers import UserCreateSerializer
 
@@ -145,3 +143,11 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         context = {'request': request}
         return RecipeReadSerializer(instance, context=context).data
+
+
+class RecipeShortSerializer(serializers.ModelSerializer):
+    image = Base64ImageField()
+
+    class Meta:
+        model = Recipe
+        fields = ('id', 'name', 'image', 'cooking_time')
