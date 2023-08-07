@@ -6,7 +6,7 @@ from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from rest_framework.response import Response
 
 from .filters import RecipeFilter
-from .models import Ingredient, Recipe, Tag, Favorite
+from .models import Ingredient, Recipe, Tag, Favorite, ShoppingCart
 from .pagination import CustomPagination
 from .serializers import (IngredientSerializer, RecipeReadSerializer,
                           RecipeWriteSerializer, TagSerializer,
@@ -39,6 +39,17 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return self.add_to(Favorite, request.user, pk)
         elif request.method == 'DELETE':
             return self.delete_from(Favorite, request.user, pk)
+
+    @action(
+        detail=True,
+        methods=['post', 'delete'],
+        permission_classes=[IsAuthenticated]
+    )
+    def shopping_cart(self, request, pk):
+        if request.method == 'POST':
+            return self.add_to(ShoppingCart, request.user, pk)
+        elif request.method == 'DELETE':
+            return self.delete_from(ShoppingCart, request.user, pk)
 
     def add_to(self, model, user, pk):
         if model.objects.filter(user=user, recipe__id=pk).exists():
