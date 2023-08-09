@@ -38,18 +38,21 @@ class UserViewSet(DjoserUserViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         elif request.method == 'DELETE':
-            subscription = get_object_or_404(Subscription,
-                                             follower=request.user,
-                                             author=author)
+            subscription = get_object_or_404(
+                Subscription,
+                follower=request.user,
+                author=author
+            )
             subscription.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-#
-#     @action(detail=False, permission_classes=[IsAuthenticated])
-#     def subscriptions(self, request):
-#         user = request.user
-#         queryset = User.objects.filter(subscribing__user=user)
-#         pages = self.paginate_queryset(queryset)
-#         serializer = SubscriptionSerializer(pages,
-#                                          many=True,
-#                                          context={'request': request})
-#         return self.get_paginated_response(serializer.data)
+
+    @action(detail=False, permission_classes=[IsAuthenticated])
+    def subscriptions(self, request):
+        queryset = User.objects.filter(authors__follower=request.user)
+        pages = self.paginate_queryset(queryset)
+        serializer = SubscriptionSerializer(
+            pages,
+            many=True,
+            context={'request': request}
+        )
+        return self.get_paginated_response(serializer.data)
