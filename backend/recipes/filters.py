@@ -1,7 +1,7 @@
 from django_filters.rest_framework import (AllValuesMultipleFilter,
-                                           BooleanFilter, FilterSet)
+                                           BooleanFilter, FilterSet, filters)
 
-from .models import Recipe
+from .models import Recipe, Ingredient
 
 
 class RecipeFilter(FilterSet):
@@ -28,3 +28,11 @@ class RecipeFilter(FilterSet):
         return queryset.filter(
             pk__in=(cart_recipe.recipe.pk for cart_recipe in cart_recipes)
         )
+
+
+class IngredientFilter(FilterSet):
+    name = filters.CharFilter(lookup_expr='startswith')
+
+    class Meta:
+        model = Ingredient
+        fields = ['name']

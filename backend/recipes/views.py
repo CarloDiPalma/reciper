@@ -5,7 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from rest_framework.response import Response
 
-from .filters import RecipeFilter
+from .filters import RecipeFilter, IngredientFilter
 from .models import Favorite, Ingredient, Recipe, ShoppingCart, Tag
 from .pagination import CustomPagination
 from .serializers import (IngredientSerializer, RecipeReadSerializer,
@@ -73,6 +73,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
 class IngredientViewSet(viewsets.ModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = IngredientFilter
     lookup_field = 'id'
     http_method_names = ['get']
 
