@@ -141,13 +141,19 @@ AUTH_USER_MODEL = 'users.User'
 
 DJOSER = {
     "LOGIN_FIELD": "email",
-    "USER_CREATE_PASSWORD_RETYPE": False,
-    "SET_USERNAME_RETYPE": True,
+    "HIDE_USERS": False,
+    # "PERMISSIONS": {
+    #     "resipe": ("api.permissions.AuthorStaffOrReadOnly,",),
+    #     "recipe_list": ("api.permissions.AuthorStaffOrReadOnly",),
+    #     "user": ("api.permissions.OwnerUserOrReadOnly",),
+    #     "user_list": ("api.permissions.OwnerUserOrReadOnly",),
+    # },
     "SERIALIZERS": {
-        "user_create": "users.serializers.UserCreateSerializer",
-        "user": "djoser.serializers.UserSerializer",
-        "current_user": "djoser.serializers.UserSerializer",
+        "user_create": "users.serializers.UserCustomCreateSerializer",
+        "user": "users.serializers.CustomUserSerializer",
+        "current_user": "users.serializers.CustomUserSerializer",
         "user_delete": "djoser.serializers.UserSerializer",
+        "user_list": "users.serializers.CustomUserSerializer",
     },
 }
 

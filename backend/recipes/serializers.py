@@ -5,9 +5,10 @@ from django.db.models import F
 from rest_framework import serializers
 from rest_framework.fields import IntegerField, SerializerMethodField
 from rest_framework.relations import PrimaryKeyRelatedField
-from users.serializers import UserCreateSerializer
 
-from .models import Ingredient, Recipe, Tag, RecipeIngredient
+from users.serializers import CustomUserSerializer
+
+from .models import Ingredient, Recipe, RecipeIngredient, Tag
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -38,7 +39,7 @@ class RecipeReadSerializer(serializers.ModelSerializer):
         many=True,
         read_only=True
     )
-    author = UserCreateSerializer(read_only=True)
+    author = CustomUserSerializer(read_only=True)
     ingredients = SerializerMethodField(method_name='get_ingredients')
     image = Base64ImageField()
     is_favorited = SerializerMethodField(
@@ -95,7 +96,7 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         queryset=Tag.objects.all(),
         many=True
     )
-    author = UserCreateSerializer(read_only=True)
+    author = CustomUserSerializer(read_only=True)
     ingredients = RecipeIngredientWriteSerializer(many=True)
     image = Base64ImageField()
 

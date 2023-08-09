@@ -1,16 +1,16 @@
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, status
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from rest_framework.response import Response
 
 from .filters import RecipeFilter
-from .models import Ingredient, Recipe, Tag, Favorite, ShoppingCart
+from .models import Favorite, Ingredient, Recipe, ShoppingCart, Tag
 from .pagination import CustomPagination
 from .serializers import (IngredientSerializer, RecipeReadSerializer,
-                          RecipeWriteSerializer, TagSerializer,
-                          RecipeShortSerializer)
+                          RecipeShortSerializer, RecipeWriteSerializer,
+                          TagSerializer)
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
@@ -36,9 +36,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
     )
     def favorite(self, request, pk):
         if request.method == 'POST':
-            return self.add_to(Favorite, request, pk)
+            return self.add_object(Favorite, request, pk)
         elif request.method == 'DELETE':
-            return self.delete_from(Favorite, request, pk)
+            return self.delete_object(Favorite, request, pk)
 
     @action(
         detail=True,
@@ -47,11 +47,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
     )
     def shopping_cart(self, request, pk):
         if request.method == 'POST':
-            return self.add_to(ShoppingCart, request, pk)
+            return self.add_object(ShoppingCart, request, pk)
         elif request.method == 'DELETE':
-            return self.delete_from(ShoppingCart, request, pk)
+            return self.delete_object(ShoppingCart, request, pk)
 
-    def add_to(self, model, request, pk):
+    def add_object(self, model, request, pk):
         if model.objects.filter(user=request.user, recipe__id=pk).exists():
             return Response({'errors': 'Рецепт уже добавлен'},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -61,7 +61,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         serializer = RecipeShortSerializer(recipe, context=context)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    def delete_from(self, model, request, pk):
+    def delete_object(self, model, request, pk):
         obj = model.objects.filter(user=request.user, recipe__id=pk)
         if obj.exists():
             obj.delete()
