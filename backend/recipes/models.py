@@ -144,11 +144,13 @@ class ShoppingCart(models.Model):
 
     recipe = models.ForeignKey(
         Recipe,
+        related_name='shopping_cart',
         on_delete=models.CASCADE,
         verbose_name='Рецепт в списке покупок',
     )
     user = models.ForeignKey(
         User,
+        related_name='shopping_cart',
         on_delete=models.CASCADE,
         verbose_name='Пользователь, добавивший рецепт в список покупок',
     )
