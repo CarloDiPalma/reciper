@@ -50,21 +50,17 @@ class RecipeReadSerializer(serializers.ModelSerializer):
         return ingredients
 
     def get_is_favorited(self, recipe):
-        if self.context.get("request").method == "POST":
-            return False
         user = self.context.get("request").user
-
-        if user.is_anonymous:
+        if self.context.get("request").method == "POST" or user.is_anonymous:
             return False
+
         return user.favorite_set.filter(recipe=recipe).exists()
 
     def get_is_in_shopping_cart(self, recipe):
-        if self.context.get("request").method == "POST":
-            return False
         user = self.context.get("request").user
-
-        if user.is_anonymous:
+        if self.context.get("request").method == "POST" or user.is_anonymous:
             return False
+
         return user.shopping_cart.filter(recipe=recipe).exists()
 
 
