@@ -50,10 +50,12 @@ class Recipe(models.Model):
     image = models.ImageField(upload_to="recipes/images")
     tags = models.ManyToManyField(Tag, verbose_name="Теги")
     ingredients = models.ManyToManyField(
-        Ingredient, through="recipes.RecipeIngredient", verbose_name="Ингредиенты"
+        Ingredient,
+        through="recipes.RecipeIngredient",
+        verbose_name="Ингредиенты"
     )
     cooking_time = models.PositiveSmallIntegerField(
-        validators=[MinValueValidator(1, message="Минимум один час")]
+        validators=[MinValueValidator(1, message="Минимум одна минута")]
     )
 
     class Meta:
