@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.db.models import F
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
@@ -92,6 +93,7 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
             "cooking_time",
         )
 
+    @transaction.atomic
     def create(self, validated_data):
         tags = validated_data.pop("tags")
         ingredients = validated_data.pop("ingredients")
@@ -109,6 +111,7 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         )
         return recipe
 
+    @transaction.atomic
     def update(self, recipe, validated_data):
         tags = validated_data.pop("tags")
         ingredients = validated_data.pop("ingredients")
