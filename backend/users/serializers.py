@@ -6,12 +6,10 @@ User = get_user_model()
 
 
 class UserCustomCreateSerializer(UserCreateSerializer):
-
     class Meta:
         model = User
-        fields = ('email', 'id', 'username', 'first_name',
-                  'last_name', 'password')
-        extra_kwargs = {'password': {'write_only': True}}
+        fields = ("email", "id", "username", "first_name", "last_name", "password")
+        extra_kwargs = {"password": {"write_only": True}}
 
 
 class CustomUserSerializer(UserSerializer):
@@ -20,16 +18,16 @@ class CustomUserSerializer(UserSerializer):
     class Meta:
         model = User
         fields = (
-            'email',
-            'id',
-            'username',
-            'first_name',
-            'last_name',
-            'is_subscribed',
+            "email",
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "is_subscribed",
         )
 
     def get_is_subscribed(self, user):
-        if self.context.get('request').method == 'POST':
+        if self.context.get("request").method == "POST":
             return False
 
         if user.is_anonymous:
@@ -43,17 +41,19 @@ class SubscriptionSerializer(CustomUserSerializer):
 
     class Meta(CustomUserSerializer.Meta):
         fields = CustomUserSerializer.Meta.fields + (
-            'recipes', 'recipes_count',
+            "recipes",
+            "recipes_count",
         )
-        read_only_fields = ('email', 'username')
+        read_only_fields = ("email", "username")
 
     def get_recipes(self, obj):
         from recipes.serializers import RecipeShortSerializer
-        request = self.context.get('request')
-        limit = request.GET.get('recipes_limit')
+
+        request = self.context.get("request")
+        limit = request.GET.get("recipes_limit")
         recipes = obj.recipe_set.all()
         if limit:
-            recipes = recipes[:int(limit)]
+            recipes = recipes[: int(limit)]
         serializer = RecipeShortSerializer(recipes, many=True, read_only=True)
         return serializer.data
 
