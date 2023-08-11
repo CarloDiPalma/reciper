@@ -1,3 +1,4 @@
+from colorfield.fields import ColorField
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -9,7 +10,10 @@ class Tag(models.Model):
     """Тег"""
 
     name = models.CharField(max_length=70)
-    color = models.CharField(max_length=7)
+    color = ColorField(
+        default="#F1F1F1",
+        format="hexa"
+    )
     slug = models.SlugField(max_length=50, unique=True)
 
     class Meta:
