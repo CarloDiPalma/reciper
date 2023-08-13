@@ -1,4 +1,4 @@
-name: Main Kittygram workflow
+name: Main Foodgram workflow
 
 on:
   push:
@@ -12,9 +12,9 @@ jobs:
       postgres:
         image: postgres:13.10
         env:
-          POSTGRES_USER: kittygram_user
-          POSTGRES_PASSWORD: kittygram_password
-          POSTGRES_DB: kittygram_db
+          POSTGRES_USER: foodgram_user
+          POSTGRES_PASSWORD: foodgram_password
+          POSTGRES_DB: foodgram_db
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
@@ -32,9 +32,9 @@ jobs:
         pip install -r ./backend/requirements.txt
     - name: Test with flake8 and django tests
       env:
-        POSTGRES_USER: kittygram_user
-        POSTGRES_PASSWORD: kittygram_password
-        POSTGRES_DB: kittygram_db
+        POSTGRES_USER: foodgram_user
+        POSTGRES_PASSWORD: foodgram_password
+        POSTGRES_DB: foodgram_db
         DB_HOST: 127.0.0.1
         DB_PORT: 5432
       run: |
@@ -61,7 +61,7 @@ jobs:
         with:
           context: ./backend/
           push: true
-          tags: carlodipalma/kittygram_backend:latest
+          tags: carlodipalma/foodgram_backend:latest
 
   frontend_tests:
     runs-on: ubuntu-latest
@@ -102,7 +102,7 @@ jobs:
         with:
           context: ./frontend/
           push: true
-          tags: carlodipalma/kittygram_frontend:latest
+          tags: carlodipalma/foodgram_frontend:latest
 
   build_gateway_and_push_to_docker_hub:
     name: Push gateway Docker image to DockerHub
@@ -122,7 +122,7 @@ jobs:
         with:
           context: ./nginx/
           push: true
-          tags: carlodipalma/kittygram_gateway:latest
+          tags: carlodipalma/foodgram_gateway:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -141,7 +141,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           source: "docker-compose.production.yml"
-          target: "kittygram"
+          target: "foodgram"
       - name: Executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
         with:
@@ -150,7 +150,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
-            cd kittygram
+            cd foodgram
             sudo docker compose -f docker-compose.production.yml pull
             sudo docker compose -f docker-compose.production.yml down
             sudo docker compose -f docker-compose.production.yml up -d
