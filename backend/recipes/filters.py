@@ -26,7 +26,7 @@ class RecipeFilter(FilterSet):
     def get_is_in_shopping_cart(self, queryset, name, value):
         if not value:
             return queryset
-        cart_recipes = self.request.user.shoppingcart_set.all()
+        cart_recipes = self.request.user.shopping_cart.all()
         return queryset.filter(
             pk__in=(cart_recipe.recipe.pk for cart_recipe in cart_recipes)
         )
