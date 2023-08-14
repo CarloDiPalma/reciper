@@ -17,7 +17,8 @@ class UserViewSet(DjoserUserViewSet):
     http_method_names = ["get", "post", "delete"]
 
     @action(
-        detail=True, methods=["post", "delete"], permission_classes=[IsAuthenticated]
+        detail=True, methods=["post", "delete"],
+        permission_classes=[IsAuthenticated]
     )
     def subscribe(self, request, **kwargs):
         author_id = self.kwargs.get("id")
