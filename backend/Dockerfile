@@ -11,5 +11,5 @@ RUN pip install -r requirements.txt --no-cache-dir
 
 COPY . .
 
-CMD ["gunicorn", "backend.wsgi:application", "--bind", "0:8000"]
+CMD ["gunicorn", "backend.wsgi:application", "--bind", "0:9000"]
 #CMD ["python", "manage.py", "runserver", "0:8000"]
