@@ -16,7 +16,7 @@ services:
   backend:
     container_name: foodgram-backend
     image: carlodipalma/foodgram_backend:latest
-    env_file: ./.env
+    env_file: ../.env
     volumes:
       - static_foodgram:/backend_static
       - media_foodgram:/app/media
@@ -24,7 +24,7 @@ services:
       - db
   frontend:
     container_name: foodgram-front
-    env_file: ./.env
+    env_file: ../.env
     image: carlodipalma/foodgram_frontend:latest
     command: cp -r /app/build/. /static/
     volumes:
@@ -32,7 +32,7 @@ services:
   gateway:
     container_name: foodgram-nginx
     image: carlodipalma/foodgram_gateway:latest
-    env_file: ./.env
+    env_file: ../.env
     ports:
       - 9000:80
     volumes:
