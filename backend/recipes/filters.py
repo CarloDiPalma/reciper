@@ -1,9 +1,5 @@
-from django_filters.rest_framework import (
-    AllValuesMultipleFilter,
-    BooleanFilter,
-    FilterSet,
-    filters,
-)
+from django_filters.rest_framework import (AllValuesMultipleFilter,
+                                           BooleanFilter, FilterSet, filters)
 
 from .models import Ingredient, Recipe
 
