@@ -44,7 +44,10 @@ class Migration(migrations.Migration):
                 ("name", models.CharField(max_length=70)),
                 (
                     "measurement_unit",
-                    models.CharField(max_length=10, verbose_name="Единицы измерения"),
+                    models.CharField(
+                        max_length=10,
+                        verbose_name="Единицы измерения"
+                    ),
                 ),
             ],
             options={
