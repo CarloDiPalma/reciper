@@ -26,7 +26,10 @@ class RecipeReadSerializer(serializers.ModelSerializer):
     author = CustomUserSerializer(read_only=True)
     ingredients = SerializerMethodField(method_name="get_ingredients")
     image = Base64ImageField()
-    is_favorited = SerializerMethodField(method_name="get_is_favorited", read_only=True)
+    is_favorited = SerializerMethodField(
+        method_name="get_is_favorited",
+        read_only=True
+    )
     is_in_shopping_cart = SerializerMethodField(read_only=True)
 
     class Meta:

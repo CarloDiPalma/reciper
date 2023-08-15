@@ -21,7 +21,9 @@ class RecipeFilter(FilterSet):
         if not value:
             return queryset
         favorites = self.request.user.favorite_set.all()
-        return queryset.filter(pk__in=(favorite.recipe.pk for favorite in favorites))
+        return queryset.filter(
+            pk__in=(favorite.recipe.pk for favorite in favorites)
+        )
 
     def get_is_in_shopping_cart(self, queryset, name, value):
         if not value:
