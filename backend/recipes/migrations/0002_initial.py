@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name="shopping_cart",
                 to=settings.AUTH_USER_MODEL,
-                verbose_name="Пользователь, добавивший рецепт в список покупок",
+                verbose_name="Пользователь, добавивший рецепт в список покупок"
             ),
         ),
         migrations.AddField(
