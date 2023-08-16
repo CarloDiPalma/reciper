@@ -62,13 +62,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "backend.wsgi.application"
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': os.getenv(
@@ -137,6 +130,7 @@ DJOSER = {
     "PERMISSIONS": {
         "user": ["djoser.permissions.CurrentUserOrAdminOrReadOnly"],
         "user_list": ["rest_framework.permissions.IsAuthenticatedOrReadOnly"],
+        "password_reset": ["rest_framework.permissions.AllowAny"],
     },
     "SERIALIZERS": {
         "user_create": "users.serializers.UserCustomCreateSerializer",
