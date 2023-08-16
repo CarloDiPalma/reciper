@@ -131,6 +131,7 @@ DJOSER = {
         "user": ["djoser.permissions.CurrentUserOrAdminOrReadOnly"],
         "user_list": ["rest_framework.permissions.IsAuthenticatedOrReadOnly"],
         "password_reset": ["rest_framework.permissions.AllowAny"],
+        "set_password": ["rest_framework.permissions.AllowAny"],
     },
     "SERIALIZERS": {
         "user_create": "users.serializers.UserCustomCreateSerializer",
