@@ -14,6 +14,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='recipe',
             name='cooking_time',
-            field=models.PositiveSmallIntegerField(validators=[django.core.validators.MinValueValidator(1, message='Минимум одна минута')]),
+            field=models.PositiveSmallIntegerField(
+                validators=[django.core.validators.MinValueValidator(
+                    1,
+                    message='Минимум одна минута'
+                )]
+            ),
         ),
     ]
