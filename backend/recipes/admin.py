@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.contrib.admin import TabularInline
+from django.contrib.admin import TabularInline, display
 
 from .models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                      ShoppingCart, Tag)
@@ -19,11 +19,17 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ("author", "text", "name", "image", "cooking_time")
+    list_display = ("author", "text", "name", "image",
+                    "cooking_time", "in_favorites_count")
     list_editable = ("text",)
     search_fields = ("name",)
+    list_filter = ["name", "author", "tags__name"]
     empty_value_display = "-пусто-"
     inlines = (IngredientInline,)
+
+    @display(description='Количество в избранных')
+    def in_favorites_count(self, obj):
+        return obj.favorite_set.count()
 
 
 @admin.register(Ingredient)
@@ -31,6 +37,7 @@ class IngredientAdmin(admin.ModelAdmin):
     list_display = ("name", "measurement_unit")
     list_display_links = ("name",)
     list_editable = ("measurement_unit",)
+    list_filter = ["name"]
     search_fields = ("name",)
     empty_value_display = "-пусто-"
 
