@@ -1,14 +1,17 @@
-# praktikum_new_diplom
-# Foodgram
-Cервис для публикаций и обмена рецептами.
+# Учебный проект 'Reciper'
+
+Cервис для публикации и обмена рецептами.
 
 Авторизованные пользователи могут подписываться на понравившихся авторов, добавлять рецепты в избранное, в покупки, скачивать список покупок. Неавторизованным пользователям доступна регистрация, авторизация, просмотр рецептов других пользователей.
 
 ![Foodgram Workflow](https://github.com/CarloDiPalma/foodgram-project-react/actions/workflows/main.yml/badge.svg)
 
+## Учетные данные для авторизации
+email:`admin@admin.com`
+password:`1234`
 
 ## Стек технологий
-Python 3.9.10, Django 3.2.20, Django REST Framework 3.14, PostgresQL, Docker, Yandex.Cloud.
+Python 3.9.10, Django 3.2.20, Django REST Framework 3.14, Djoser, PostgresQL, Docker, React.
 
 ## Установка
 Для запуска локально, создайте файл `.env` в корневой директории с содержанием:
@@ -33,17 +36,6 @@ sudo apt install docker docker-compose
 ```
 
 Про установку на других операционных системах вы можете прочитать в [документации](https://docs.docker.com/engine/install/) и [про установку docker-compose](https://docs.docker.com/compose/install/).
-
-### Установка проекта на сервер
-1. Скопируйте файлы из папки `/server/` на ваш сервер и `.env` файл из директории `/backend/`:
-```bash
-scp -r data/ <username>@<server_ip>:/home/<username>/
-scp backend/.env <username>@<server_ip>:/home/<username>/
-```
-2. Зайдите на сервер и настройте `server_name` в конфиге nginx на ваше доменное имя:
-```bash
-vim nginx.conf
-```
 
 ### Настройка проекта
 1. Запустите docker compose:
@@ -72,5 +64,6 @@ docker-compose exec backend python manage.py collectstatic
 
 
 ## Документация к API
-Чтобы открыть документацию локально, запустите сервер и перейдите по ссылке:
-[http://127.0.0.1/api/docs/](http://127.0.0.1/api/docs/)
+Документация доступна по адресу: [theproject.ddns.net/redoc/](http://theproject.ddns.net/redoc/).
+Чтобы открыть документацию локально, запустите сервер на 8000 порту и перейдите по ссылке:
+[http://127.0.0.1:8000/redoc/](http://127.0.0.1:8000/redoc/)
