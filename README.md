@@ -4,17 +4,17 @@ Cервис для публикаций и обмена рецептами.
 
 Авторизованные пользователи могут подписываться на понравившихся авторов, добавлять рецепты в избранное, в покупки, скачивать список покупок. Неавторизованным пользователям доступна регистрация, авторизация, просмотр рецептов других пользователей.
 
-![Foodgram Workflow](https://github.com/Yan-Zhelanov/foodgram-project-react/actions/workflows/foodgram_workflow.yaml/badge.svg)
+![Foodgram Workflow](https://github.com/CarloDiPalma/foodgram-project-react/actions/workflows/main.yml/badge.svg)
 
 
 ## Стек технологий
-Python 3.9.7, Django 3.2.7, Django REST Framework 3.12, PostgresQL, Docker, Yandex.Cloud.
+Python 3.9.10, Django 3.2.20, Django REST Framework 3.14, PostgresQL, Docker, Yandex.Cloud.
 
 ## Установка
 Для запуска локально, создайте файл `.env` в директории `/backend/` с содержанием:
 ```
 SECRET_KEY=любой_секретный_ключ_на_ваш_выбор
-DEBUG=False
+DEBUG=True
 ALLOWED_HOSTS=*,или,ваши,хосты,через,запятые,без,пробелов
 DB_ENGINE=django.db.backends.postgresql
 DB_NAME=postgres
