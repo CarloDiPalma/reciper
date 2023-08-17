@@ -30,7 +30,8 @@ class CustomUserSerializer(UserSerializer):
     def get_is_subscribed(self, user):
         if self.context.get("request").method == "POST" or user.is_anonymous:
             return False
-        return user.authors.filter(author=user).exists()
+        follower = self.context.get("request").user
+        return user.authors.filter(author=user, follower=follower).exists()
 
 
 class SubscriptionSerializer(CustomUserSerializer):
