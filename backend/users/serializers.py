@@ -37,6 +37,7 @@ class CustomUserSerializer(UserSerializer):
 class SubscriptionSerializer(CustomUserSerializer):
     recipes = SerializerMethodField()
     recipes_count = SerializerMethodField()
+    is_subscribed = SerializerMethodField(read_only=True)
 
     class Meta(CustomUserSerializer.Meta):
         fields = CustomUserSerializer.Meta.fields + (
@@ -44,6 +45,10 @@ class SubscriptionSerializer(CustomUserSerializer):
             "recipes_count",
         )
         read_only_fields = ("email", "username")
+
+    def get_is_subscribed(self, user):
+        follower = self.context.get("request").user
+        return user.authors.filter(author=user, follower=follower).exists()
 
     def get_recipes(self, obj):
         from recipes.serializers import RecipeShortSerializer
