@@ -5,7 +5,7 @@ from .models import Subscription, User
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ("email", "username", "first_name")
+    list_display = ("id", "email", "username", "first_name")
     empty_value_display = "-пусто-"
     search_fields = ("email", "username")
     list_filter = ["email", "username", "first_name"]
