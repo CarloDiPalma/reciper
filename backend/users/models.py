@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.db.models import UniqueConstraint
+from django.db.models import UniqueConstraint, CheckConstraint, Q, F
 
 
 class User(AbstractUser):
@@ -48,6 +48,10 @@ class Subscription(models.Model):
                 fields=("author", "follower"),
                 name="Нельзя подписаться дважды",
             ),
+            CheckConstraint(
+                check=~Q(author=F('follower')),
+                name='no_self_following'
+            )
         )
 
     def __str__(self):

@@ -25,6 +25,12 @@ class UserViewSet(DjoserUserViewSet):
         author_id = self.kwargs.get("id")
         author = get_object_or_404(User, id=author_id)
 
+        if request.user == author:
+            return Response(
+                {"403_FORBIDDEN": "No self following"},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
         if request.method == "POST":
             serializer = SubscriptionSerializer(
                 author, data=request.data, context={"request": request}
